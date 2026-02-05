@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stream;
+
+// サービス定定義
+// Bidirectional Streaming RPC (双方向ストリーミング)
+service StreamService {
+  // クライアントとサーバーが互いにストリームでデータを送受信します。
+  // `stream` キーワードが両方の引数と戻り値についているのが特徴です。
+  // クライアントは任意のタイミングでRequestを送り、サーバーも任意のタイミングでResponseを返せます。
+  // TCPのような全二重通信が可能です。
+  rpc BidirectionalStream (stream Request) returns (stream Response);
+}
+
+// クライアントから送信されるデータ
+message Request {
+  int32 id = 1;      // データのID
+  int32 value = 2;   // 送信する値
+}
+
+// サーバーから返されるイベント通知
+message Response {
+  string message = 1; // サーバーからのメッセージ
+  int32 count = 2;    // バッファリングして処理したデータの個数
+  int32 sum = 3;      // 処理した値の合計（など）
+}
